@@ -1,0 +1,110 @@
+create database store;
+
+create table cliente (
+idCliente int auto_increment primary key,
+nome varchar(100),
+email varchar (100),
+dataRegistro date
+);
+
+-- criar uma procedure
+
+delimiter //
+create procedure HelloWorld ()
+begin
+
+select "ola mundo !" as mensagem;
+
+end //
+delimiter ;
+
+-- chamar  procedure
+
+Call HelloWorld;
+
+-------------------------------
+
+delimiter //
+create procedure inserirCliente(
+in p_nome varchar (100),
+in p_email varchar (100),
+in p_dataRegistro date
+)
+begin
+insert into  cliente (nome, email, dataRegistro)
+values (p_nome, p_email, p_dataRegistro);
+
+end //
+delimiter ;
+
+Call inserirCliente ('naruto', 'naruto@gmail.com', '2024-10-21');
+
+delimiter //
+create procedure atualizarCliente(
+in p_idCliente int,
+in p_nome varchar (100),
+in p_email varchar (100)
+)
+begin 
+update  cliente 
+set nome = p_nome, email = p_email
+where idCliente = p_idCliente;
+end //
+delimiter ;
+
+Call inserirCliente('sasuke', 'sasuke@gmail.com','2024-10-21');
+select * from cliente;
+
+call atualizarCliente(2,'shikamaru', 'shikamaru@gmail.com');
+select * from cliente;
+
+
+delimiter //
+create procedure buscarCliente(
+in p_idCliente int,
+out p_nome varchar(100)
+)
+begin
+
+select nome into p_nome
+from cliente
+where idCliente = p_idCliente; 
+
+end //
+delimiter ;
+-- criar variavel
+
+set @nomeCliente = '';
+call buscarCliente(2, @nomeCliente);
+select @nomeCliente;
+
+delimiter //
+create procedure excluirCliente(
+in p_idCliente int
+)
+begin
+delete from cliente
+where idCliente = p_idCliente;
+
+end //
+delimiter ;
+
+call excluirCliente(2);
+
+select * from cliente;
+
+
+delimiter //
+create procedure totalCliente(
+
+)
+begin
+
+select count(idCliente)
+from cliente;
+
+end //
+delimiter ;
+
+
+call totalCliente();
